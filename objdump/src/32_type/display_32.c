@@ -1,0 +1,66 @@
+/*
+** EPITECH PROJECT, 2022
+** B-PSU-400-PAR-4-1-nmobjdump-laetitia.bousch
+** File description:
+** display_32
+*/
+
+#include "file.h"
+
+void display_section_32(char *tmp)
+{
+    printf("Contents of section %s:\n", tmp);
+}
+
+void display_1_32(version_32_t *version, int i, long unsigned int j)
+{
+    printf(" %04lx ", version->shdr[i].sh_addr + j);
+}
+
+void display_2_32(version_32_t *version, int i, file_t *file,
+                long unsigned int j)
+{
+    unsigned char *values = (unsigned char *)
+        (version->shdr[i].sh_offset + file->data);
+
+    for (int tmp = 0; tmp < 16; tmp++) {
+        if ((tmp + j) >= version->shdr[i].sh_size) {
+            printf(" ");
+        } else {
+            printf("%02x", values[tmp + j]);
+        }
+        if ((tmp + 1) % 4 == 0) {
+            printf(" ");
+        }
+    }
+    printf("  ");
+}
+
+void display_3_32(version_32_t *version, int i, file_t *file,
+                    long unsigned int j)
+{
+    char *values = (char *)(version->shdr[i].sh_offset + file->data);
+
+    for (int tmp = 0; tmp < 16; tmp++) {
+        if ((tmp + j) >= version->shdr[i].sh_size) {
+            printf(" ");
+        } else {
+            printf("%c", isprint(values[tmp + j]) ? values[tmp + j] : '.');
+        }
+    }
+    printf("\n");
+}
+
+void display_32(version_32_t *version, file_t *file, char *f)
+{
+    int p = 0;
+
+    printf("\n%s:     file format elf32-i386\n", f);
+    printf("architecture: i386, flags 0x%08x:\n", version->flags);
+    for (int i = 0; i < flags; i++) {
+        if (version->flags & flags_tab[i]) {
+            p = space_display_32(p, i);
+        }
+    }
+    printf("\nstart address 0x%016x\n\n", version->ehdr->e_entry);
+}
